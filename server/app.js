@@ -1,25 +1,27 @@
 /*
  * @Author: liuchenxi
  * @Date: 2020-10-17 10:28:08
- * @LastEditTime: 2020-10-17 10:43:05
+ * @LastEditTime: 2020-11-10 10:38:14
  * @LastEditors: Please set LastEditors
  * @Description: Express入口文件
  * @FilePath: \server\app.js
  */
-require('babel-register')
+import 'babel-register'
+import express from 'express'
+import path from 'path'
+import createError from 'http-errors'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
 
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
-
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
+// Router
+import userRouter from './routes/user'
+import articleRouter from './routes/article'
+import tagRouter from './routes/tags'
+import templateRouter from './routes/template'
 
 var app = express()
 const host = process.env.HOST || 'localhost'
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -31,8 +33,11 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
+// Router
+app.use('/user', userRouter)
+app.use('/article', articleRouter)
+app.use('/tag', tagRouter)
+app.use('/template', templateRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
